@@ -23,15 +23,28 @@ i18n
   .use(detector)
   .use(backend)
   .use(reactI18nextModule) // passes i18n down to react-i18next
-  .init({
-    //resources,
-    lng: "en",
-    fallbackLng: "en", // use en if detected lng is not available
-    keySeparator: false, // we do not use keys in form messages.welcome
-
-    interpolation: {
-      escapeValue: false, // react already safes from xss
+  .init(
+    {
+      //resources,
+      ns: ["common", "moduleA", "moduleB"],
+      defaultNS: "moduleA",
     },
-  });
+    (err, t) => {
+      i18n.t("myKey"); // key in moduleA namespace (defined default)
+      i18n.t("common:myKey"); // key in common namespace
+    }
+  );
 
+// lng: "en",
+// fallbackLng: "en", // use en if detected lng is not available
+// keySeparator: false, // we do not use keys in form messages.welcome
+
+// interpolation: {
+//   escapeValue: false, // react already safes from xss
+// },
+
+// load additional namespaces after initialization
+i18n.loadNamespaces("anotherNamespace", (err, t) => {
+  /* ... */
+});
 export default i18n;
